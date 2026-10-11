@@ -1,0 +1,60 @@
+name: Issue Analysis
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Analyze issue with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            ISSUE: #${{ github.event.issue.number }}
+            TITLE: ${{ github.event.issue.title }}
+
+            Analiza este issue y publica UN solo comentario con un análisis inicial, en español.
+            Lee CLAUDE.md y explora el código (index.html, style.css, game.js) para fundamentar el análisis.
+            NO modifiques archivos ni crees ramas o PRs; solo analiza.
+
+            Estructura del comentario:
+
+            ## 🔎 Análisis inicial
+            - **Resumen**: qué se reporta o solicita, en 1-2 frases.
+            - **Tipo**: bug / feature / mejora / pregunta / otro.
+            - **Prioridad sugerida**: alta / media / baja, con justificación breve.
+            - **Complejidad estimada**: baja / media / alta.
+
+            ## 📍 Código relacionado
+            Archivos, funciones y líneas relevantes (formato `game.js:123`), con una breve explicación de por qué importan.
+
+            ## 🧠 Causa probable / enfoque
+            Para bugs: causa raíz probable. Para features: enfoque de implementación sugerido.
+
+            ## ✅ Plan de resolución propuesto
+            Pasos concretos y ordenados para resolver el issue.
+
+            ## ⚠️ Riesgos y casos borde
+            Qué podría romperse o requiere cuidado.
+
+            ## ❓ Información faltante
+            Preguntas para el autor si el issue es ambiguo o incompleto (omite la sección si no aplica).
+
+            Sé conciso y específico. No inventes código ni líneas que no hayas verificado.
+            Publica el comentario con: gh issue comment ${{ github.event.issue.number }} --body "..."
+            Aplica además la etiqueta de tipo correspondiente si existe: gh issue edit ${{ github.event.issue.number }} --add-label "bug" (o "enhancement"/"question").
+          claude_args: |
+            --allowed-tools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh label list:*),Read,Grep,Glob"
