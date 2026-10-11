@@ -3,6 +3,11 @@ name: Issue Analysis
 on:
   issues:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to analyze"
+        required: true
 
 jobs:
   analyze:
@@ -23,9 +28,9 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             REPO: ${{ github.repository }}
-            ISSUE: #${{ github.event.issue.number }}
-            TITLE: ${{ github.event.issue.title }}
+            ISSUE: #${{ github.event.issue.number || inputs.issue_number }}
 
+            Primero lee el issue con: gh issue view ${{ github.event.issue.number || inputs.issue_number }}
             Analiza este issue y publica UN solo comentario con un análisis inicial, en español.
             Lee CLAUDE.md y explora el código (index.html, style.css, game.js) para fundamentar el análisis.
             NO modifiques archivos ni crees ramas o PRs; solo analiza.
@@ -54,7 +59,7 @@ jobs:
             Preguntas para el autor si el issue es ambiguo o incompleto (omite la sección si no aplica).
 
             Sé conciso y específico. No inventes código ni líneas que no hayas verificado.
-            Publica el comentario con: gh issue comment ${{ github.event.issue.number }} --body "..."
-            Aplica además la etiqueta de tipo correspondiente si existe: gh issue edit ${{ github.event.issue.number }} --add-label "bug" (o "enhancement"/"question").
+            Publica el comentario con: gh issue comment ${{ github.event.issue.number || inputs.issue_number }} --body "..."
+            Aplica además la etiqueta de tipo correspondiente si existe: gh issue edit ${{ github.event.issue.number || inputs.issue_number }} --add-label "bug" (o "enhancement"/"question").
           claude_args: |
             --allowed-tools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh label list:*),Read,Grep,Glob"
