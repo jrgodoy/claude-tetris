@@ -273,7 +273,11 @@ function loadRecords() {
     const d = JSON.parse(localStorage.getItem(RECORDS_KEY));
     if (!d || !Array.isArray(d.top)) return empty;
     return {
-      top: d.top.filter(e => e && Number.isFinite(e.score)).slice(0, TOP_N),
+      top: d.top
+        .filter(e => e && Number.isFinite(e.score))
+        .map(e => ({ name: String(e.name ?? 'Anónimo'), score: e.score, lines: Number(e.lines) || 0, level: Number(e.level) || 1, date: e.date }))
+        .sort((x, y) => y.score - x.score)
+        .slice(0, TOP_N),
       bestCombo: Number(d.bestCombo) || 0,
       maxLines: Number(d.maxLines) || 0,
     };
@@ -357,7 +361,8 @@ function endGame() {
   gameoverRecords.classList.remove('hidden');
   if (pendingEntry) {
     nameInput.value = '';
-    setTimeout(() => nameInput.focus(), 0);
+    // Retardo para que el auto-repeat de Space no escriba en el input
+    setTimeout(() => { if (pendingEntry) nameInput.focus(); }, 400);
   }
   overlayTitle.textContent = 'GAME OVER';
   overlayScore.textContent = `Puntuación: ${score.toLocaleString()}`;
