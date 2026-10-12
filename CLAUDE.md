@@ -21,4 +21,5 @@ Three files: `index.html` (DOM + two canvases), `style.css`, `game.js` (all logi
 - Loop: `loop(ts)` via `requestAnimationFrame` accumulates `dropAccum`; gravity interval is `dropInterval` (recomputed in `clearLines`: `max(100, 1000 - (level-1)*90)`). Pause cancels the animation frame and restarts `loop` on resume; `endGame` also cancels it.
 - Rotation: `rotateCW` + `tryRotate` wall kicks of `[0,-1,1,-2,2]` columns (not SRS).
 - Scoring: `LINE_SCORES[cleared] * level`; soft drop +1/row, hard drop +2/row.
+- Theming: CSS variables in `:root` (dark) and `:root[data-theme="light"]`. `setTheme(theme)` sets `data-theme`, swaps `palette` (`COLORS`/`LIGHT_COLORS`), reads `--grid` into `gridColor` for the canvas, and redraws (`draw()` + `drawNext()`, since the loop is cancelled when paused/game over). Not persisted; always starts dark.
 - Changing `COLS`/`ROWS`/`BLOCK` requires updating `<canvas id="board">` `width`/`height` in `index.html` (`COLS*BLOCK` x `ROWS*BLOCK`). Next-piece canvas is a fixed 120x120 (4x4 grid at 30px).
