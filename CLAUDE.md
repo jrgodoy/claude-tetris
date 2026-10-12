@@ -15,7 +15,7 @@ Open `index.html` in a browser, or serve statically (e.g. `python -m http.server
 Three files: `index.html` (DOM + two canvases), `style.css`, `game.js` (all logic, single global script with `'use strict'`, no modules).
 
 `game.js` details that span the file:
-- Board is a `ROWS x COLS` matrix; `0` = empty, `1–7` = piece type index into both `COLORS` and `PIECES` (same index used for cell values, so cell value = color).
+- Board is a `ROWS x COLS` matrix; `0` = empty, `1–8` = piece type index into both `COLORS` and `PIECES` (same index used for cell values, so cell value = color).
 - Game state lives in module-level `let` variables declared on one line (`board, current, next, score, ...`) and reset in `init()`. `init()` also serves as restart handler.
 - Piece flow: `lockPiece()` → `merge()` → `clearLines()` → `spawn()`. `spawn()` promotes `next` to `current`, rolls new `next`, and calls `endGame()` if the new piece collides.
 - Loop: `loop(ts)` via `requestAnimationFrame` accumulates `dropAccum`; gravity interval is `dropInterval` (recomputed in `clearLines`: `max(100, 1000 - (level-1)*90)`). Pause cancels the animation frame and restarts `loop` on resume; `endGame` also cancels it.
