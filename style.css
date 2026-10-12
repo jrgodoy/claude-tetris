@@ -36,6 +36,17 @@
   --grid: #e3e5ee;
 }
 
+/* Neon: canvas negro en ambos temas */
+:root[data-skin="neon"] {
+  --canvas-bg: #000000;
+  --grid: #1a1a2e;
+}
+
+:root[data-skin="neon"] #board,
+:root[data-skin="neon"] #next-canvas {
+  border-color: #2a2a4a;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -241,4 +252,21 @@ kbd {
 
 #restart-btn:hover {
   background: var(--accent-hover);
+}
+
+/* ---- Selector de skin ---- */
+.skin-select {
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.skin-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
