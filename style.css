@@ -15,6 +15,8 @@
   --overlay-bg: rgba(10, 10, 20, 0.75);
   --board-shadow: rgba(0, 0, 0, 0.6);
   --grid: #22222e;
+  --highlight-bg: rgba(122, 162, 247, 0.22);
+  --input-bg: #1a1a25;
 }
 
 :root[data-theme="light"] {
@@ -34,6 +36,8 @@
   --overlay-bg: rgba(238, 240, 247, 0.8);
   --board-shadow: rgba(40, 50, 90, 0.2);
   --grid: #e3e5ee;
+  --highlight-bg: rgba(59, 91, 219, 0.16);
+  --input-bg: #ffffff;
 }
 
 *, *::before, *::after {
@@ -225,7 +229,7 @@ kbd {
   color: var(--accent);
 }
 
-#restart-btn {
+#restart-btn, #play-btn, .btn {
   margin-top: 8px;
   background: var(--accent);
   color: var(--accent-contrast);
@@ -239,6 +243,97 @@ kbd {
   transition: background 0.15s;
 }
 
-#restart-btn:hover {
+#restart-btn:hover, #play-btn:hover, .btn:hover {
   background: var(--accent-hover);
 }
+
+#start-screen { z-index: 2; }
+
+.hidden { display: none !important; }
+
+.start-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--accent);
+}
+
+/* ---- Récords ---- */
+.records { width: 270px; }
+
+.records-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+}
+
+.records-list li {
+  display: grid;
+  grid-template-columns: 24px 1fr auto 44px;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--text);
+  text-align: left;
+}
+
+.records-list li.current {
+  background: var(--highlight-bg);
+  outline: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.records-list .pts, .records-list .ln { text-align: right; }
+.records-list .ln { color: var(--muted); }
+
+.records-stats {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.records-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.name-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.name-row { display: flex; gap: 8px; }
+
+.name-row input {
+  width: 140px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  user-select: text;
+}
+
+.name-row .btn { margin-top: 0; padding: 8px 14px; }
